@@ -133,8 +133,6 @@ def prediction_page():
 
 except Exception as e:
         st.error(f"⚠️ Error while scaling input: {e}")
-else:
-        st.error("⚠️ Scaler not loaded. Please check scaler.pkl.")
 
 # ---------------- About Page ----------------
 def about_page():
@@ -164,6 +162,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
