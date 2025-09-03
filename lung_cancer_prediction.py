@@ -14,11 +14,11 @@ scaler = load('scaler.pkl')
 def dataset_preview_page():
     st.title('📊 DATASET PREVIEW')
     st.header('LUNG CANCER PREDICTION DATASET')
-    
+
     # Link to dataset
     dataset_link = 'https://www.kaggle.com/datasets/nancyalaswad90/lung-cancer'
     st.write(f'You can download the full dataset from [Kaggle]({dataset_link}).')
-    
+
     # Load a sample dataset for preview
     df = pd.read_csv('lung_data.csv')  # Update this with your dataset file
     st.write('HERE IS A PREVIEW OF THE DATASET:')
@@ -29,7 +29,22 @@ def prediction_page():
     st.title('🫁 LUNG CANCER PREDICTION APP')
     st.write('FILL IN THE PATIENT DETAILS TO PREDICT THE RISK OF LUNG CANCER.')
 
-    # (all your input fields here...)
+    # Input fields for user data
+    AGE = st.number_input('AGE 🎂', min_value=0, max_value=120, value=50)
+    GENDER = st.selectbox('GENDER 👤', ['M', 'F'])
+    SMOKING = st.selectbox('DO YOU SMOKE? 🚬', ['YES', 'NO'])
+    YELLOW_FINGERS = st.selectbox('YELLOW FINGERS ✋', ['YES', 'NO'])
+    ANXIETY = st.selectbox('ANXIETY 😟', ['YES', 'NO'])
+    PEER_PRESSURE = st.selectbox('PEER PRESSURE 👥', ['YES', 'NO'])
+    CHRONIC_DISEASE = st.selectbox('CHRONIC DISEASE 🏥', ['YES', 'NO'])
+    FATIGUE = st.selectbox('FATIGUE 😴', ['YES', 'NO'])
+    ALLERGY = st.selectbox('ALLERGY 🤧', ['YES', 'NO'])
+    WHEEZING = st.selectbox('WHEEZING 😤', ['YES', 'NO'])
+    ALCOHOL_CONSUMPTION = st.selectbox('ALCOHOL CONSUMPTION 🍺', ['YES', 'NO'])
+    COUGHING = st.selectbox('COUGHING 🤧', ['YES', 'NO'])
+    SHORTNESS_OF_BREATH = st.selectbox('SHORTNESS OF BREATH 🫁', ['YES', 'NO'])
+    SWALLOWING_DIFFICULTY = st.selectbox('SWALLOWING DIFFICULTY 😣', ['YES', 'NO'])
+    CHEST_PAIN = st.selectbox('CHEST PAIN ❤️‍🩹', ['YES', 'NO'])
 
     # When user clicks Predict button
     if st.button('PREDICT 🔮'):
@@ -99,31 +114,30 @@ def prediction_page():
 
         # Encode categorical
         for col in categorical_data:
+            for column in categorical_data[col].values():
+                encoded_input_df[column] = 0
             value = input_df[col].iloc[0]
-            if value in categorical_data[col]:
-                encoded_input_df[categorical_data[col][value]] = 1
+            encoded_input_df[categorical_data[col][value]] = 1
 
         # Ensure all columns are present
         encoded_input_df = encoded_input_df.reindex(columns=model_columns, fill_value=0)
 
-        # ---- SCALE & PREDICT (inside button block) ----
+        # Scale features
         if scaler:
-            try:
-                # Match scaler feature names if available
-                if hasattr(scaler, "feature_names_in_"):
-                    encoded_input_df = encoded_input_df.reindex(columns=scaler.feature_names_in_, fill_value=0)
+       # Ensure columns match scaler training
+    if scaler:
+        if hasattr(scaler, "feature_names_in_"):
+            encoded_input_df = encoded_input_df.reindex(columns=scaler.feature_names_in_, fill_value=0)
+            input_df_scaled = scaler.transform(encoded_input_df)
 
-                # Scale input
-                input_df_scaled = scaler.transform(encoded_input_df)
+            
+            # Predict using Random Forest model
+            prediction = rf_model.predict(input_df_scaled)[0]
 
-                # Predict
-                prediction = rf_model.predict(input_df_scaled)[0]
-                st.success(f'🌟 PREDICTION: {"HIGH RISK OF LUNG CANCER" if prediction == 1 else "LOW RISK"}')
-
-            except Exception as e:
-                st.error(f"⚠️ Error while scaling input: {e}")
+            # Display the prediction result
+            st.success(f'🌟 PREDICTION: {"HIGH RISK OF LUNG CANCER" if prediction == 1 else "LOW RISK"}')
         else:
-            st.error("⚠️ Scaler not loaded. Please check scaler.pkl.")
+            st.error("⚠️ SCALER NOT LOADED PROPERLY. PLEASE CHECK THE SCALER FILE.")
 
 # ---------------- About Page ----------------
 def about_page():
@@ -153,10 +167,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
