@@ -30,28 +30,24 @@ def prediction_page():
     st.write('Fill in the patient details to predict the risk of lung cancer.')
 
     # Input fields for user data
-    AGE = st.number_input('Age 🎂', min_value=0, max_value=120, value=50)
-    GENDER = st.selectbox('Gender 👤', ['Male', 'Female'])
-    SMOKING = st.selectbox('Do you smoke? 🚬', ['Yes', 'No'])
-    YELLOW_FINGERS = st.selectbox('Yellow Fingers ✋', ['Yes', 'No'])
-    ANXIETY = st.selectbox('Anxiety 😟', ['Yes', 'No'])
-    PEER_PRESSURE = st.selectbox('Peer Pressure 👥', ['Yes', 'No'])
-    CHRONIC_DISEASE = st.selectbox('Chronic Disease 🏥', ['Yes', 'No'])
-    FATIGUE = st.selectbox('Fatigue 😴', ['Yes', 'No'])
-    ALLERGY = st.selectbox('Allergy 🤧', ['Yes', 'No'])
-    WHEEZING = st.selectbox('Wheezing 😤', ['Yes', 'No'])
-    ALCOHOL_CONSUMING = st.selectbox('Alcohol Consumption 🍺', ['Yes', 'No'])
-    COUGHING = st.selectbox('Coughing 🤧', ['Yes', 'No'])
-    SHORTNESS_OF_BREATH = st.selectbox('Shortness of Breath 🫁', ['Yes', 'No'])
-    SWALLOWING_DIFFICULTY = st.selectbox('Swallowing Difficulty 😣', ['Yes', 'No'])
-    CHEST_PAIN = st.selectbox('Chest Pain ❤️‍🩹', ['Yes', 'No'])
+    age = st.number_input('Age 🎂', min_value=0, max_value=120, value=50)
+    gender = st.selectbox('Gender 👤', ['Male', 'Female'])
+    smoking = st.selectbox('Do you smoke? 🚬', ['Yes', 'No'])
+    yellow_fingers = st.selectbox('Yellow Fingers ✋', ['Yes', 'No'])
+    anxiety = st.selectbox('Anxiety 😟', ['Yes', 'No'])
+    peer_pressure = st.selectbox('Peer Pressure 👥', ['Yes', 'No'])
+    chronic_disease = st.selectbox('Chronic Disease 🏥', ['Yes', 'No'])
+    fatigue = st.selectbox('Fatigue 😴', ['Yes', 'No'])
+    allergy = st.selectbox('Allergy 🤧', ['Yes', 'No'])
+    wheezing = st.selectbox('Wheezing 😤', ['Yes', 'No'])
+    alcohol_consumption = st.selectbox('Alcohol Consumption 🍺', ['Yes', 'No'])
+    coughing = st.selectbox('Coughing 🤧', ['Yes', 'No'])
+    shortness_of_breath = st.selectbox('Shortness of Breath 🫁', ['Yes', 'No'])
+    swallowing_difficulty = st.selectbox('Swallowing Difficulty 😣', ['Yes', 'No'])
+    chest_pain = st.selectbox('Chest Pain ❤️‍🩹', ['Yes', 'No'])
 
     # When user clicks Predict button
     if st.button('Predict 🔮'):
-    # dictionary to convert Yes/No
-        yn = {'Yes': 1, 'No': 0}
-        male = 1 if gender == 'Male' else 0
-
         # Create a dictionary for the input
         input_data = {
             'Age': [age],
@@ -73,9 +69,59 @@ def prediction_page():
 
         input_df = pd.DataFrame(input_data)
 
-        # Convert categorical variables into numeric (Yes=1, No=0, Male=1, Female=0)
-        input_df = input_df.replace({'Yes': 1, 'No': 0, 'Male': 1, 'Female': 0})
+            # Define model columns
+        model_columns = [
+            'Age',
+            'Gender_Female', 'Gender_Male',
+            'Smoking_Yes', 'Smoking_No',
+            'Yellow_Fingers_Yes', 'Yellow_Fingers_No',
+            'Anxiety_Yes', 'Anxiety_No',
+            'Peer_Pressure_Yes', 'Peer_Pressure_No',
+            'Chronic_Disease_Yes', 'Chronic_Disease_No',
+            'Fatigue_Yes', 'Fatigue_No',
+            'Allergy_Yes', 'Allergy_No',
+            'Wheezing_Yes', 'Wheezing_No',
+            'Alcohol_Consumption_Yes', 'Alcohol_Consumption_No',
+            'Coughing_Yes', 'Coughing_No',
+            'Shortness_of_Breath_Yes', 'Shortness_of_Breath_No',
+            'Swallowing_Difficulty_Yes', 'Swallowing_Difficulty_No',
+            'Chest_Pain_Yes', 'Chest_Pain_No'
+        ]
 
+        # Create encoded dataframe
+        encoded_input_df = pd.DataFrame(0, index=input_df.index, columns=model_columns)
+
+        # Copy numeric column
+        encoded_input_df['Age'] = input_df['Age']
+
+        # Hardcode categorical mappings
+        categorical_data = {
+            'Gender': {'Male': 'Gender_Male', 'Female': 'Gender_Female'},
+            'Smoking': {'Yes': 'Smoking_Yes', 'No': 'Smoking_No'},
+            'Yellow_Fingers': {'Yes': 'Yellow_Fingers_Yes', 'No': 'Yellow_Fingers_No'},
+            'Anxiety': {'Yes': 'Anxiety_Yes', 'No': 'Anxiety_No'},
+            'Peer_Pressure': {'Yes': 'Peer_Pressure_Yes', 'No': 'Peer_Pressure_No'},
+            'Chronic_Disease': {'Yes': 'Chronic_Disease_Yes', 'No': 'Chronic_Disease_No'},
+            'Fatigue': {'Yes': 'Fatigue_Yes', 'No': 'Fatigue_No'},
+            'Allergy': {'Yes': 'Allergy_Yes', 'No': 'Allergy_No'},
+            'Wheezing': {'Yes': 'Wheezing_Yes', 'No': 'Wheezing_No'},
+            'Alcohol_Consumption': {'Yes': 'Alcohol_Consumption_Yes', 'No': 'Alcohol_Consumption_No'},
+            'Coughing': {'Yes': 'Coughing_Yes', 'No': 'Coughing_No'},
+            'Shortness_of_Breath': {'Yes': 'Shortness_of_Breath_Yes', 'No': 'Shortness_of_Breath_No'},
+            'Swallowing_Difficulty': {'Yes': 'Swallowing_Difficulty_Yes', 'No': 'Swallowing_Difficulty_No'},
+            'Chest_Pain': {'Yes': 'Chest_Pain_Yes', 'No': 'Chest_Pain_No'}
+        }
+
+        # Encode categorical
+        for col in categorical_data:
+            for column in categorical_data[col].values():
+                encoded_input_df[column] = 0
+            value = input_df[col].iloc[0]
+            encoded_input_df[categorical_data[col][value]] = 1
+
+        # Ensure all columns are present
+        encoded_input_df = encoded_input_df.reindex(columns=model_columns, fill_value=0)
+       
         # Scale features
         if scaler:
             input_df_scaled = scaler.transform(input_df)
@@ -113,8 +159,9 @@ def main():
         dataset_preview_page()
     elif choice == 'About the Project':
         about_page()
-        
-if __name__ == '__main__': main()
+
+if __name__ == '__main__':
+    main()
 
 
 
