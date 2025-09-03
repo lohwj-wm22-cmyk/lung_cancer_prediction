@@ -31,7 +31,7 @@ def prediction_page():
 
     # Input fields for user data
     AGE = st.number_input('AGE 🎂', min_value=0, max_value=120, value=50)
-    GENDER = st.selectbox('GENDER 👤', ['MALE', 'FEMALE'])
+    GENDER = st.selectbox('GENDER 👤', ['M', 'F'])
     SMOKING = st.selectbox('DO YOU SMOKE? 🚬', ['YES', 'NO'])
     YELLOW_FINGERS = st.selectbox('YELLOW FINGERS ✋', ['YES', 'NO'])
     ANXIETY = st.selectbox('ANXIETY 😟', ['YES', 'NO'])
@@ -72,7 +72,7 @@ def prediction_page():
         # Define model columns
         model_columns = [
             'AGE',
-            'GENDER_FEMALE', 'GENDER_MALE',
+            'GENDER_F', 'GENDER_M',
             'SMOKING_YES', 'SMOKING_NO',
             'YELLOW_FINGERS_YES', 'YELLOW_FINGERS_NO',
             'ANXIETY_YES', 'ANXIETY_NO',
@@ -96,7 +96,7 @@ def prediction_page():
 
         # Hardcode categorical mappings
         categorical_data = {
-            'GENDER': {'MALE': 'GENDER_MALE', 'FEMALE': 'GENDER_FEMALE'},
+            'GENDER': {'M': 'GENDER_M', 'F': 'GENDER_F'},
             'SMOKING': {'YES': 'SMOKING_YES', 'NO': 'SMOKING_NO'},
             'YELLOW_FINGERS': {'YES': 'YELLOW_FINGERS_YES', 'NO': 'YELLOW_FINGERS_NO'},
             'ANXIETY': {'YES': 'ANXIETY_YES', 'NO': 'ANXIETY_NO'},
