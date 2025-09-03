@@ -121,23 +121,26 @@ def prediction_page():
 
         # Ensure all columns are present
         encoded_input_df = encoded_input_df.reindex(columns=model_columns, fill_value=0)
-
-        # Scale features
-    if scaler:
-       # Ensure columns match scaler training
+        
         if scaler:
+            try:
+        # If scaler has feature names (trained on DataFrame)
         if hasattr(scaler, "feature_names_in_"):
             encoded_input_df = encoded_input_df.reindex(columns=scaler.feature_names_in_, fill_value=0)
-            input_df_scaled = scaler.transform(encoded_input_df)
 
-            
-            # Predict using Random Forest model
-            prediction = rf_model.predict(input_df_scaled)[0]
+        # Scale input
+        input_df_scaled = scaler.transform(encoded_input_df)
 
-            # Display the prediction result
-            st.success(f'🌟 PREDICTION: {"HIGH RISK OF LUNG CANCER" if prediction == 1 else "LOW RISK"}')
-        else:
-            st.error("⚠️ SCALER NOT LOADED PROPERLY. PLEASE CHECK THE SCALER FILE.")
+        # Predict using Random Forest model
+        prediction = rf_model.predict(input_df_scaled)[0]
+
+        # Display result
+        st.success(f'🌟 PREDICTION: {"HIGH RISK OF LUNG CANCER" if prediction == 1 else "LOW RISK"}')
+
+    except Exception as e:
+        st.error(f"⚠️ Error while scaling input: {e}")
+else:
+    st.error("⚠️ Scaler not loaded. Please check scaler.pkl.")
 
 # ---------------- About Page ----------------
 def about_page():
@@ -167,4 +170,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
