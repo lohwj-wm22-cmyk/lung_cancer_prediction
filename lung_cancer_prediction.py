@@ -114,7 +114,8 @@ def main():
     elif choice == 'About the Project':
         about_page()
         
-    if __name__ == '__main__':
-    main()
+        if __name__ == '__main__':
+            main()
+
 
 
