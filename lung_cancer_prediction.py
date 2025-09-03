@@ -121,9 +121,7 @@ def prediction_page():
 
         # Ensure all columns are present
         encoded_input_df = encoded_input_df.reindex(columns=model_columns, fill_value=0)
-        st.write("Scaler expects:", scaler.feature_names_in_)
-        st.write("Encoded input df:", encoded_input_df.columns.tolist())
-
+        
        # Ensure columns match scaler training
     if scaler:
         if hasattr(scaler, "feature_names_in_"):
@@ -166,5 +164,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
