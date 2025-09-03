@@ -124,7 +124,7 @@ def prediction_page():
        
         # Scale features
         if scaler:
-            input_df_scaled = scaler.transform(input_df)
+            input_df_scaled = scaler.transform(encoded_input_df)
 
             # Predict using Random Forest model
             prediction = rf_model.predict(input_df_scaled)[0]
@@ -162,6 +162,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
