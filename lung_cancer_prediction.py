@@ -40,11 +40,11 @@ def prediction_page():
     FATIGUE = st.selectbox('Fatigue 😴', ['Yes', 'No'])
     ALLERGY = st.selectbox('Allergy 🤧', ['Yes', 'No'])
     WHEEZING = st.selectbox('Wheezing 😤', ['Yes', 'No'])
-    ALCOHOL CONSUMING = st.selectbox('Alcohol Consumption 🍺', ['Yes', 'No'])
+    ALCOHOL_CONSUMING = st.selectbox('Alcohol Consumption 🍺', ['Yes', 'No'])
     COUGHING = st.selectbox('Coughing 🤧', ['Yes', 'No'])
-    SHORTNESS OF BREATH = st.selectbox('Shortness of Breath 🫁', ['Yes', 'No'])
-    SWALLOWING DIFFICULTY = st.selectbox('Swallowing Difficulty 😣', ['Yes', 'No'])
-    CHEST PAIN = st.selectbox('Chest Pain ❤️‍🩹', ['Yes', 'No'])
+    SHORTNESS_OF_BREATH = st.selectbox('Shortness of Breath 🫁', ['Yes', 'No'])
+    SWALLOWING_DIFFICULTY = st.selectbox('Swallowing Difficulty 😣', ['Yes', 'No'])
+    CHEST_PAIN = st.selectbox('Chest Pain ❤️‍🩹', ['Yes', 'No'])
 
     # When user clicks Predict button
     if st.button('Predict 🔮'):
@@ -116,6 +116,7 @@ def main():
         
 if __name__ == '__main__':
     main()
+
 
 
 
