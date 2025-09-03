@@ -122,10 +122,12 @@ def prediction_page():
         # Ensure all columns are present
         encoded_input_df = encoded_input_df.reindex(columns=model_columns, fill_value=0)
        
-        # Scale features
-        if scaler:
+       # Ensure columns match scaler training
+    if scaler:
+        if hasattr(scaler, "feature_names_in_"):
+            encoded_input_df = encoded_input_df.reindex(columns=scaler.feature_names_in_, fill_value=0)
             input_df_scaled = scaler.transform(encoded_input_df)
-
+            
             # Predict using Random Forest model
             prediction = rf_model.predict(input_df_scaled)[0]
 
@@ -162,3 +164,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
