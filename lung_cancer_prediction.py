@@ -36,7 +36,7 @@ def prediction_page():
     YELLOW_FINGERS = st.selectbox('Yellow Fingers ✋', ['Yes', 'No'])
     ANXIETY = st.selectbox('Anxiety 😟', ['Yes', 'No'])
     PEER_PRESSURE = st.selectbox('Peer Pressure 👥', ['Yes', 'No'])
-    CHRONIC DISEASE = st.selectbox('Chronic Disease 🏥', ['Yes', 'No'])
+    CHRONIC_DISEASE = st.selectbox('Chronic Disease 🏥', ['Yes', 'No'])
     FATIGUE = st.selectbox('Fatigue 😴', ['Yes', 'No'])
     ALLERGY = st.selectbox('Allergy 🤧', ['Yes', 'No'])
     WHEEZING = st.selectbox('Wheezing 😤', ['Yes', 'No'])
@@ -116,6 +116,7 @@ def main():
         
 if __name__ == '__main__':
     main()
+
 
 
 
