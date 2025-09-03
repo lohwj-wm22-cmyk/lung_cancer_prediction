@@ -121,21 +121,22 @@ def prediction_page():
         encoded_input_df = encoded_input_df.reindex(columns=model_columns, fill_value=0)
 
         if scaler:
-            if hasattr(scaler, "feature_names_in_"):
-            encoded_input_df = encoded_input_df.reindex(columns=scaler.feature_names_in_, fill_value=0)
-                encoded_input_df = encoded_input_df.reindex(columns=scaler.feature_names_in_, fill_value=0)
+            try:
+                # Match scaler feature names if available
+                if hasattr(scaler, "feature_names_in_"):
+                    encoded_input_df = encoded_input_df.reindex(columns=scaler.feature_names_in_, fill_value=0)
 
-            input_df_scaled = scaler.transform(encoded_input_df)
-            prediction = rf_model.predict(input_df_scaled)[0]
+                # Scale input
+                input_df_scaled = scaler.transform(encoded_input_df)
 
-            st.success(f'🌟 PREDICTION: {"HIGH RISK OF LUNG CANCER" if prediction == 1 else "LOW RISK"}')
+                # Predict
+                prediction = rf_model.predict(input_df_scaled)[0]
+                st.success(f'🌟 PREDICTION: {"HIGH RISK OF LUNG CANCER" if prediction == 1 else "LOW RISK"}')
+
+            except Exception as e:
+                st.error(f"⚠️ Error while scaling input: {e}")
         else:
             st.error("⚠️ Scaler not loaded. Please check scaler.pkl.")
-
-except Exception as e:
-        st.error(f"⚠️ Error while scaling input: {e}")
-else:
-        st.error("⚠️ Scaler not loaded. Please check scaler.pkl.")
 
 # ---------------- About Page ----------------
 def about_page():
@@ -165,3 +166,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
