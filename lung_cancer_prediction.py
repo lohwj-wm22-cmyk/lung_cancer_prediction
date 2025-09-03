@@ -90,8 +90,6 @@ def prediction_page():
 
         # Create encoded dataframe
         encoded_input_df = pd.DataFrame(0, index=input_df.index, columns=model_columns)
-
-        # Copy numeric column
         encoded_input_df['AGE'] = input_df['AGE']
 
         # Hardcode categorical mappings
@@ -170,6 +168,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
