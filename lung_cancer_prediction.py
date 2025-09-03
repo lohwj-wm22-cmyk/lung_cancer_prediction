@@ -119,8 +119,8 @@ def prediction_page():
             value = input_df[col].iloc[0]
             encoded_input_df[categorical_data[col][value]] = 1
             
-# Ensure all columns are present in same order as model
-encoded_input_df = encoded_input_df.reindex(columns=model_columns, fill_value=0)
+        # Ensure all columns are present
+        encoded_input_df = encoded_input_df.reindex(columns=model_columns, fill_value=0)
 
 if scaler:
     try:
@@ -170,6 +170,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
