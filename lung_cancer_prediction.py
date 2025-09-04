@@ -125,8 +125,6 @@ def prediction_page():
                 # Match scaler feature names if available
                 if hasattr(scaler, "feature_names_in_"):
                     encoded_input_df = encoded_input_df.reindex(columns=scaler.feature_names_in_, fill_value=0)
-                elif hasattr(rf_model, "feature_names_in_"):
-                    encoded_input_df = encoded_input_df.reindex(columns=rf_model.feature_names_in_, fill_value=0)
                     
                 st.write("✅ Encoded Input DataFrame:", encoded_input_df)  # Debugging step
 
@@ -170,6 +168,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
