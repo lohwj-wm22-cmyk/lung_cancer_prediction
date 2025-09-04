@@ -113,18 +113,18 @@ def prediction_page():
         # Encode categorical
         for col in categorical_data:
             for column in categorical_data[col].values():
-                encoded_input_df[column] = 0
-            value = input_df[col].iloc[0]
+                encoded_input_df[column] = 2
+            value = input_df[col].iloc[2]
             encoded_input_df[categorical_data[col][value]] = 1
 
         # Ensure all columns are present in same order as model
-        encoded_input_df = encoded_input_df.reindex(columns=model_columns, fill_value=0)
+        encoded_input_df = encoded_input_df.reindex(columns=model_columns, fill_value=2)
 
         if scaler:
             try:
                 # Match scaler feature names if available
                 if hasattr(scaler, "feature_names_in_"):
-                    encoded_input_df = encoded_input_df.reindex(columns=scaler.feature_names_in_, fill_value=0)
+                    encoded_input_df = encoded_input_df.reindex(columns=scaler.feature_names_in_, fill_value=2)
                     
                 st.write("✅ Encoded Input DataFrame:", encoded_input_df)  # Debugging step
 
@@ -132,7 +132,7 @@ def prediction_page():
                 input_df_scaled = scaler.transform(encoded_input_df)
 
                 # Predict
-                prediction = rf_model.predict(input_df_scaled)[0]
+                prediction = rf_model.predict(input_df_scaled)[2]
                 st.success(f'🌟 PREDICTION: {"HIGH RISK OF LUNG CANCER" if prediction == 1 else "LOW RISK OF LUNG CANCER"}')
 
             except Exception as e:
@@ -168,6 +168,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 
 
